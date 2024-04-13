@@ -16,9 +16,9 @@ class Driver {
       json["username"],
       json["email"],
       json["password"],
-      json["age"],
+      int.parse(json["age"]),
       json["gender"],
-      json["safety_score"]
+      double.parse(json["safety_score"])
       );
 
   Map<String, dynamic> toJson() => {
