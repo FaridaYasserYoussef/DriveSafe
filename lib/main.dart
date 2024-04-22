@@ -16,6 +16,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    
+    // For TESTING without Login
+    // return GetMaterialApp(
+    //   home: DashboardOfFragments()
+    // );
+    
     return GetMaterialApp(
       home: FutureBuilder(
         future: RememberUserPrefs.readUserInfo(),
