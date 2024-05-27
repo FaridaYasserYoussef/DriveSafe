@@ -1,15 +1,25 @@
+import 'package:drivesafe/authentication/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'mapFragmentScreen.dart';
 import 'tripFragmentScreen.dart';
 import 'dashboardFragmentScreen.dart';
+import 'profileFragmentScreen.dart';
 import 'package:get/get.dart';
+import 'package:drivesafe/userPreferences/user_preferences.dart';
+import 'package:drivesafe/authentication/firebase_auth_implementation/firebase_auth_services.dart';
+
+import 'package:firebase_auth/firebase_auth.dart';
 
 class DashboardOfFragments extends StatelessWidget {
+
+
 
 List<Widget> _fragmentScreens = [
     DashboardFragmentScreen(),
     MapFragmentScreen(),
-    TripFragmentScreen()
+    TripFragmentScreen(),
+    ProfileFragmentScreen()
+    
    ];
   List _navigationButtonsProperties = [
      {
@@ -28,16 +38,24 @@ List<Widget> _fragmentScreens = [
        "active_icon": Icons.car_crash,
        "non_active_icon": Icons.car_crash_outlined,
        "label" : "Trips"
+     },
+
+     {
+       "active_icon": Icons.person_2,
+       "non_active_icon": Icons.person_2_outlined,
+       "label" : "Trips"
      }
 
    ];
 
       RxInt _indexNumber = 0.obs;
 
+ 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+    
       body: SafeArea(
          child: Obx(
                ()=> _fragmentScreens[_indexNumber.value]

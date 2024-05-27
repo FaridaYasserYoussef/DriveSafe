@@ -1,14 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:drivesafe/reusableWidgets/DrivingTipCard.dart';
 import 'package:drivesafe/reusableWidgets/DashboardComponent.dart';
+import 'package:drivesafe/userPreferences/user_preferences.dart';
+import 'package:drivesafe/authentication/firebase_auth_implementation/firebase_auth_services.dart';
+import 'package:drivesafe/authentication/login_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
+import 'package:drivesafe/userPreferences/user_preferences.dart';
+
 class DashboardFragmentScreen extends StatelessWidget {
 
   List<String> listOfTips = ["Content of tip 1 ", "Content of Tip 2", "Content of Tip 3", "Content of Tip 4"];
-
+ void logout() async{
+        await RememberUserPrefs.removeUserInfo();
+        FirebaseAuth.instance.signOut();
+        Get.to(()=> const LoginScreen());
+  }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return FutureBuilder(future: RememberUserPrefs.readUserInfo(), builder: (context, snapshot){
+    if(snapshot.data == null ){
+      return const  LoginScreen();
+    }
+    else{
+      return Scaffold(
       appBar: AppBar(
+        actions: [IconButton(onPressed:logout, icon: const Icon(Icons.logout), color: const Color(0xFF207868),)],
         backgroundColor: Colors.white, 
         centerTitle: true,
         title: Text("Dashboard", 
@@ -20,7 +37,7 @@ class DashboardFragmentScreen extends StatelessWidget {
     body: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-      DashboardComponent(compValue: "95", icon: Icons.scale, description: "Overall Average \n         Score", dim: 200, valueSize: 40,iconSize: 75, descriptionSize: 20,),
+      DashboardComponent(compValue: snapshot.data!.safety_score.toStringAsFixed(0), icon: Icons.scale, description: "Overall Average \n         Score", dim: 200, valueSize: 40,iconSize: 75, descriptionSize: 20,),
         
   
         Row(
@@ -89,6 +106,9 @@ class DashboardFragmentScreen extends StatelessWidget {
       ],
     ),
     );
+    }
+    });
+    
   }
 }
 

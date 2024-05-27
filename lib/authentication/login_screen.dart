@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:drivesafe/Fragments/dashboardOfFragments.dart';
 import 'package:drivesafe/api_connection/api_connection.dart';
+import 'package:drivesafe/authentication/firebase_auth_implementation/firebase_auth_services.dart';
 import 'package:drivesafe/authentication/signup_screen.dart';
 import 'package:drivesafe/model/driver.dart';
 import 'package:drivesafe/userPreferences/user_preferences.dart';
@@ -10,6 +11,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 
 class LoginScreen extends StatefulWidget {
@@ -24,10 +27,19 @@ class _LoginScreenState extends State<LoginScreen> {
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
   var isObscure = true.obs;
+  final FirebaseAuthService _auth = FirebaseAuthService();
 
 loginUserNow() async{
 
     try{
+
+      User? user = await _auth.signInWithEmailAndPassword(emailController.text.trim(),  passwordController.text.trim());
+
+
+     if (user == null){
+                Fluttertoast.showToast(msg: "Invalid Email or Password", backgroundColor: Color(0xFFDDA87E));
+                return;
+     }
       var res = await http.post(
           Uri.parse(API.login),
           body: {

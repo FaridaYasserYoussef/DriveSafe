@@ -25,7 +25,7 @@ final double descriptionSize;
       height: dim,
       decoration: new BoxDecoration(
         color: Colors.white,
-        shape: BoxShape.circle,
+        shape: BoxShape.rectangle,
         border: Border.all(
       color: Color(0xFF2b7f70), // Change to the color you desire
       width: 2.0,),

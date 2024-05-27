@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:core';
 import 'package:drivesafe/api_connection/api_connection.dart';
+import 'package:drivesafe/authentication/firebase_auth_implementation/firebase_auth_services.dart';
 import 'package:drivesafe/authentication/login_screen.dart';
 import 'package:drivesafe/model/driver.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -17,7 +19,8 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  
+
+  final FirebaseAuthService _auth =  FirebaseAuthService();
  var formKey = GlobalKey<FormState>();
   var emailController = TextEditingController();
   var usernameController = TextEditingController();
@@ -48,6 +51,18 @@ String selectedValueVehicle = "Car";
     // );
 
     try{
+
+      User? user = await  _auth.signUpWithEmailAndPassword(emailController.text.trim(),  passwordController.text.trim());
+
+      if(user == null){
+
+                 Fluttertoast.showToast(msg: "An error occurred while signing you up, please try again.", backgroundColor: Color(0xFFDDA87E));
+                 return;
+
+      }
+
+      
+      
       var res = await http.post(
        Uri.parse(API.signup),
        body: {
