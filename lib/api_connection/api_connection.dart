@@ -11,6 +11,10 @@ class API{
   static const uploadsensordata = "$hostConnectAuth/upload_sensor_data/";
 
 
+  // static const hostConnect = "https://drivesafeapp-a301fe33a058.herokuapp.com/";
+  // static const validateEmail = "$hostConnectAuth/validate_email/";
+  // static const getVehicleByDriver = "$hostConnectAuth/get_vehicle_by_driver/";
+
 
 
 }
