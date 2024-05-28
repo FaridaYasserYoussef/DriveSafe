@@ -37,6 +37,7 @@ loginUserNow() async{
 
 
      if (user == null){
+      print("user is null");
                 Fluttertoast.showToast(msg: "Invalid Email or Password", backgroundColor: Color(0xFFDDA87E));
                 return;
      }

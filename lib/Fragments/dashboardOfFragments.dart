@@ -43,7 +43,7 @@ List<Widget> _fragmentScreens = [
      {
        "active_icon": Icons.person_2,
        "non_active_icon": Icons.person_2_outlined,
-       "label" : "Trips"
+       "label" : "Profile"
      }
 
    ];
@@ -71,7 +71,7 @@ List<Widget> _fragmentScreens = [
           showUnselectedLabels: true,
           selectedItemColor: const Color(0xFF207868),
           unselectedItemColor: const Color(0xFF788896),
-          items: List.generate(3, (index) {
+          items: List.generate(4, (index) {
              var navBtnProperty = _navigationButtonsProperties[index];
                  return BottomNavigationBarItem(
                      activeIcon: Icon(navBtnProperty["active_icon"]),
