@@ -160,6 +160,7 @@ class _VehiclesFragmentScreenState extends State<VehiclesFragmentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: Text(
           'Vehicles',
           style: TextStyle(

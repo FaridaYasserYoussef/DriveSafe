@@ -1,6 +1,6 @@
 class API{
   // connection to api service
-  static const hostConnect = "http://192.168.1.4:8000";
+  static const hostConnect = "http://192.168.211.80:8000";
   
   static const hostConnectAuth = "$hostConnect/authentication";
   static const signup = "$hostConnectAuth/signup/";

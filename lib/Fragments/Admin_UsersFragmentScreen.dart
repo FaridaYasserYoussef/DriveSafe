@@ -189,6 +189,7 @@ class _UsersFragmentScreenState extends State<UsersFragmentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+backgroundColor: Colors.white,
         title: Text(
           'Users',
           style: TextStyle(

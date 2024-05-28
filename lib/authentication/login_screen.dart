@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:drivesafe/Fragments/Admin_dashboardOfFragments.dart';
 import 'package:drivesafe/Fragments/dashboardOfFragments.dart';
 import 'package:drivesafe/api_connection/api_connection.dart';
 import 'package:drivesafe/authentication/firebase_auth_implementation/firebase_auth_services.dart';
@@ -32,7 +33,17 @@ class _LoginScreenState extends State<LoginScreen> {
 loginUserNow() async{
 
     try{
+    if (emailController.text.trim() == 'admin@example.com' &&
+        passwordController.text.trim() == 'admin123') {
+      // Redirect to the admin dashboard
+      Fluttertoast.showToast(
+          msg: "Logged in as admin", backgroundColor: Color(0xFFDDA87E));
+      emailController.clear();
+      passwordController.clear();
+      Get.off(AdminDashboardOfFragments()); // Use Get.off for redirection
+    } else {
 
+      
       User? user = await _auth.signInWithEmailAndPassword(emailController.text.trim(),  passwordController.text.trim());
 
 
@@ -72,6 +83,11 @@ loginUserNow() async{
         }
 
       }
+
+
+    }
+
+
 
 
 
