@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:drivesafe/Fragments/Admin_dashboardOfFragments.dart';
 import 'package:drivesafe/Fragments/dashboardOfFragments.dart';
 import 'package:drivesafe/api_connection/api_connection.dart';
 import 'package:drivesafe/authentication/signup_screen.dart';
@@ -25,52 +26,96 @@ class _LoginScreenState extends State<LoginScreen> {
   var passwordController = TextEditingController();
   var isObscure = true.obs;
 
-loginUserNow() async{
+// loginUserNow() async{
 
-    try{
-      var res = await http.post(
-          Uri.parse(API.login),
-          body: {
-            'email': emailController.text.trim(),
-            'password' : passwordController.text.trim()
-          }
-      );
+//     try{
+//       var res = await http.post(
+//           Uri.parse(API.login),
+//           body: {
+//             'email': emailController.text.trim(),
+//             'password' : passwordController.text.trim()
+//           }
+//       );
 
 
 
-      if(res.statusCode == 200){
+//       if(res.statusCode == 200){
+//         var responseBodyOfLogin = jsonDecode(res.body);
+//         if(responseBodyOfLogin["success"] == true){
+//           Fluttertoast.showToast(msg: "Logged in Successfully", backgroundColor: Color(0xFFDDA87E));
+//           emailController.clear();
+//           passwordController.clear();
+//           Driver userInfo = Driver.fromJson(responseBodyOfLogin["userData"]);
+
+//           await RememberUserPrefs.storeUserInfo(userInfo);
+          
+//           Future.delayed(Duration(milliseconds: 2000), (){
+//             Get.to(DashboardOfFragments());
+
+//           });
+          
+//         }
+//         else if(responseBodyOfLogin["success"] == false){
+//           Fluttertoast.showToast(msg: "Invalid Email or Password", backgroundColor: Color(0xFFDDA87E));
+//         }
+
+//       }
+
+
+
+//     }
+//     catch(e){
+//       print(e.toString());
+//       Fluttertoast.showToast(msg: e.toString());
+//     }
+
+
+
+//   }
+
+loginUserNow() async {
+  try {
+    // Check if the entered email and password match the admin credentials
+    if (emailController.text.trim() == 'admin@example.com' &&
+        passwordController.text.trim() == 'admin123') {
+      // Redirect to the admin dashboard
+      Fluttertoast.showToast(
+          msg: "Logged in as admin", backgroundColor: Color(0xFFDDA87E));
+      emailController.clear();
+      passwordController.clear();
+      Get.off(AdminDashboardOfFragments()); // Use Get.off for redirection
+    } else {
+      // Proceed with normal user login
+      var res = await http.post(Uri.parse(API.login), body: {
+        'email': emailController.text.trim(),
+        'password': passwordController.text.trim()
+      });
+
+      if (res.statusCode == 200) {
         var responseBodyOfLogin = jsonDecode(res.body);
-        if(responseBodyOfLogin["success"] == true){
-          Fluttertoast.showToast(msg: "Logged in Successfully", backgroundColor: Color(0xFFDDA87E));
+        if (responseBodyOfLogin["success"] == true) {
+          Fluttertoast.showToast(
+              msg: "Logged in Successfully", backgroundColor: Color(0xFFDDA87E));
           emailController.clear();
           passwordController.clear();
           Driver userInfo = Driver.fromJson(responseBodyOfLogin["userData"]);
 
           await RememberUserPrefs.storeUserInfo(userInfo);
-          
-          Future.delayed(Duration(milliseconds: 2000), (){
+
+          Future.delayed(Duration(milliseconds: 2000), () {
             Get.to(DashboardOfFragments());
-
           });
-          
+        } else if (responseBodyOfLogin["success"] == false) {
+          Fluttertoast.showToast(
+              msg: "Invalid Email or Password", backgroundColor: Color(0xFFDDA87E));
         }
-        else if(responseBodyOfLogin["success"] == false){
-          Fluttertoast.showToast(msg: "Invalid Email or Password", backgroundColor: Color(0xFFDDA87E));
-        }
-
       }
-
-
-
     }
-    catch(e){
-      print(e.toString());
-      Fluttertoast.showToast(msg: e.toString());
-    }
-
-
-
+  } catch (e) {
+    print(e.toString());
+    Fluttertoast.showToast(msg: e.toString());
   }
+}
 
  @override
   Widget build(BuildContext context) {
