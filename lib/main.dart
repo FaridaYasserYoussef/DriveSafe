@@ -33,10 +33,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     
-    // For TESTING without Login
+    // // For TESTING without Login
     // return GetMaterialApp(
-    //   home: AdminDashboardOfFragments()
-    //   // home: DashboardOfFragments()
+    //   // home: AdminDashboardOfFragments()
+    //   home: DashboardOfFragments()
     // );
     
     return GetMaterialApp(
