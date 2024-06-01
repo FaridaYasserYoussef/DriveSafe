@@ -3,7 +3,7 @@ import 'dart:ffi';
 class Vehicle {
   int id;
   String license_plate;
-  int type;
+  String type;
   int driver;
 
 
@@ -13,7 +13,8 @@ class Vehicle {
       int.parse(json["id"]),
       json["license_plate"],
       json["type"],
-      json["driver"]);
+      int.parse(json["driver"])
+      );
 
   Map<String, dynamic> toJson() => {
     'id' : id.toString(),
