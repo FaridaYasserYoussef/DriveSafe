@@ -53,12 +53,12 @@ String csvPath = "media/uploads/";
   StreamSubscription<Position>? positionStream;
 
 MapBoxNavigationViewController? _controller;
-  // String? _instruction;
-  // bool _isMultipleStop = false;
-  // double? _distanceRemaining, _durationRemaining;
-  // bool _routeBuilt = false;
-  // bool _isNavigating = false;
-  // bool _arrived = false;
+  String? _instruction;
+  bool _isMultipleStop = false;
+  double? _distanceRemaining, _durationRemaining;
+  bool _routeBuilt = false;
+  bool _isNavigating = false;
+  bool _arrived = false;
   late MapBoxOptions _navigationOption;
 
 
