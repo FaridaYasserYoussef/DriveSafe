@@ -8,7 +8,8 @@ import "Fragments/dashboardOfFragments.dart";
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
-
+import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:drivesafe/Controllers/WebsocketService.dart';
 
 
 void main() async{
@@ -22,6 +23,12 @@ void main() async{
     // Set androidProvider to `AndroidProvider.debug`
     androidProvider: AndroidProvider.debug,
   );
+
+  //   Get.put(WebSocketService(
+  //   WebSocketChannel.connect(
+  //     Uri.parse('ws://192.168.1.4:8000/ws/socket-server/'),
+  //   ),
+  // ));
 
   runApp(const MyApp());
 }

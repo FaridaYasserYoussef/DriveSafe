@@ -38,6 +38,9 @@ StreamSubscription<UserAccelerometerEvent>? _userAccelerometerSubscription;
   bool _showCamera = false;
 String videoPath = "media/videos/";
 String csvPath = "media/uploads/";
+late DateTime startTime;
+String currentVideo = "";
+String currentcsv = "";
   bool runTheRest = false;
    Position? lastPosition;
      Position? initialPosition;
@@ -98,8 +101,7 @@ print(vehicle.statusCode);
             if(vehicle.statusCode == 200){
               print("vehicle found");
         var responseBodyOfVehicle= jsonDecode(vehicle.body);
-            // Vehicle driverVehicle = Vehicle.fromJson(responseBodyOfVehicle["vehicleData"]);
-            // print("the vehicle id is: " + driverVehicle.id.toString());
+           
             var res =  await http.post(Uri.parse(API.saveTrip),
              body: {
             'driver_id': currentDriver.id.toString(),
@@ -110,8 +112,11 @@ print(vehicle.statusCode);
             'last_long': lastPosition!.longitude.toString(),
             'duration': totalTimeElapsed.inMinutes.toString(),
             'distance': (totalDistance/1000).toString(),
-            'csvPath': csvPath,
-            'videoPath': videoPath
+            'csvPath': csvPath + currentcsv,
+            'videoPath': videoPath +currentVideo,
+            'endTime': DateTime.now().toString(),
+            'startTime': startTime.toString()
+
           }
             
             );
@@ -174,7 +179,7 @@ print(vehicle.statusCode);
           lastPosition = position;
         } else if (DateTime.now().difference(lastPositionTime!) > Duration(seconds: 30)) {
           _pauseRecording();
-           pauseTimer = Timer(Duration(minutes: 15), () {
+           pauseTimer = Timer(Duration(seconds: 15), () {
             if (_isPaused) {
               _stopRecordingAndSendData();
             }
@@ -197,14 +202,22 @@ print(vehicle.statusCode);
 
   void _stopRecordingAndSendData() async{
      _toggleRecording();
-    _toggleTrip();
-    if(runTheRest == true){
+     currentVideo = "";
+   await  _toggleTrip();
+    // if(runTheRest == true){
+      if(currentVideo != ""){
     stopListening();
-    }
+
+      }
+    // }
+    // videoPath = "media/videos/";
+    // csvPath = "media/uploads/";
+
     setState(() {});
   }
 
    void _startRecordingAndCollectData() async{
+    startTime = DateTime.now();
      _toggleRecording();
     _toggleTrip();
     startListening();
@@ -228,7 +241,7 @@ print(vehicle.statusCode);
     super.dispose();
   }
 
- void _toggleTrip() async {
+ Future<void> _toggleTrip() async {
     if (_showCamera) {
       final videoFile = await _cameracontroller.stopVideoRecording();
       _showCamera = false;
@@ -238,13 +251,14 @@ print(vehicle.statusCode);
       Driver? currentDriver =  await RememberUserPrefs.readUserInfo();
       final fileName =
           'trip_video_${DateTime.now().millisecondsSinceEpoch}'+ currentDriver!.id.toString() + '.mp4';
-          videoPath += fileName;
+          currentVideo = fileName;
+       
       final filePath = join(appDir!.path, fileName);
       await videoFile.saveTo(filePath);
-
+    
       print('Video saved to: $filePath');
       await _uploadVideo(filePath);
-
+      // videoPath = "media/videos/";
       _cameracontroller.dispose();
       _initializeCamera();
     } else {
@@ -265,7 +279,7 @@ Future<void> _uploadVideo(String filePath) async {
       print('Video uploaded successfully');
       final videoFile = File(filePath);
       await videoFile.delete(); // Delete the video file after successful upload
-      runTheRest =  true;
+
 
     } else {
       print('Video upload failed');
@@ -281,7 +295,8 @@ Future<void> _uploadVideo(String filePath) async {
 
      final datafileName =
           'trip_sensordata_${DateTime.now().millisecondsSinceEpoch}'+ currentDriver!.id.toString() + '.csv';
-      csvPath += datafileName;
+      // csvPath += datafileName;
+      currentcsv = datafileName;
     _filePath = '${directory.path}/' + datafileName;
 
     _userAccelerometerSubscription = userAccelerometerEvents.listen((event) {
@@ -380,7 +395,7 @@ Future<void> _uploadVideo(String filePath) async {
                               child: ElevatedButton(
                                 onPressed: (){
                                  
-                                  if(_isRecording == true){
+                                  if(_isRecording == false){
                                     _startRecordingAndCollectData();
                                   }else{
                                     _stopRecordingAndSendData();
@@ -549,4 +564,3 @@ class _PermissionScreenState extends State<PermissionScreen> {
     }
   }
 }
-
